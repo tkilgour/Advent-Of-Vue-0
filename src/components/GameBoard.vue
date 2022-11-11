@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-3 grid-rows-3 bg-gray-dark gap-0.5">
-    <GameTile v-for="(tile, index) in tiles" :key="index">
+    <GameTile v-for="(tile, index) in tiles" :key="index" @click="() => handleClick(index)">
       {{ tile }}
     </GameTile>
   </div>
@@ -19,4 +19,11 @@ const boardState = ref([
 const tiles = computed(() => boardState.value.flat())
 
 const playerTurn = ref(Math.random() > 0.5 ? 'X' : 'O')
+
+const handleClick = index => {
+  console.log(index)
+  const row = Math.floor(index / 3)
+  const col = index % 3
+  boardState[row][col] = playerTurn
+}
 </script>
