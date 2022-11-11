@@ -1,11 +1,16 @@
 <template>
   <div class="grid grid-cols-3 grid-rows-3 bg-gray-dark gap-0.5">
-    <GameTile v-for="(tile, index) in tiles" :key="index" :disabled="tile.length" @click="() => handleClick(index)">
+    <GameTile
+      v-for="(tile, index) in tiles"
+      :key="index"
+      :disabled="tile.length || winner"
+      @click="() => handleClick(index)"
+    >
       {{ tile }}
     </GameTile>
   </div>
-  <p class="pt-8 text-2xl">It's {{ message }}'s turn.</p>
-  <button class="text-lg px-4 py-8" @click="resetBoard">Play again!</button>
+  <p class="pt-8 text-2xl">{{ message }}</p>
+  <button class="text-lg px-4 py-8" @click="resetGame">Play again!</button>
 </template>
 
 <script setup>
@@ -13,13 +18,7 @@ import { ref, computed } from 'vue'
 import GameTile from './GameTile.vue'
 
 const boardState = ref(null)
-const resetBoard = () =>
-  (boardState.value = [
-    ['', '', ''],
-    ['', '', ''],
-    ['', '', ''],
-  ])
-resetBoard()
+
 const tiles = computed(() => boardState.value.flat())
 
 const playerTurn = ref(Math.random() > 0.5 ? 'X' : 'O')
@@ -28,7 +27,7 @@ const winner = ref(null)
 const checkWinState = () => {
   // check rows for all playerTurn
   boardState.value.forEach(row => {
-    if (row.every(item === 'playerTurn')) {
+    if (row.every(item => item === playerTurn.value)) {
       winner.value = playerTurn.value
     }
   })
@@ -41,6 +40,9 @@ const checkWinState = () => {
   }
 
   // check diagonals for all playerTurn
+  if (boardState.value.every((row, index) => row[index] === playerTurn.value)) winner.value = playerTurn.value
+
+  if (boardState.value.every((row, index) => row[2 - index] === playerTurn.value)) winner.value = playerTurn.value
 }
 
 const handleClick = index => {
@@ -56,9 +58,19 @@ const handleClick = index => {
 const message = computed(() => {
   if (winner.value) {
     return `${winner.value} wins!`
+  } else {
+    return `It's ${playerTurn.value}'s turn.`
   }
   // TODO: handle draw
+})
 
-  return `It's ${playerTurn.value}'s turn.`
+const resetGame = () => {
+  boardState.value = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', ''],
+  ]
+  winner.value = null
 }
+resetGame()
 </script>
