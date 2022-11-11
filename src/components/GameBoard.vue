@@ -60,4 +60,5 @@ const message = computed(() => {
   // TODO: handle draw
 
   return `It's ${playerTurn.value}'s turn.`
+}
 </script>
