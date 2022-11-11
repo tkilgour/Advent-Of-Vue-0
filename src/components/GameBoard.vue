@@ -21,9 +21,8 @@ const tiles = computed(() => boardState.value.flat())
 const playerTurn = ref(Math.random() > 0.5 ? 'X' : 'O')
 
 const handleClick = index => {
-  console.log(index)
   const row = Math.floor(index / 3)
   const col = index % 3
-  boardState[row][col] = playerTurn
+  boardState.value[row][col] = playerTurn.value
 }
 </script>
