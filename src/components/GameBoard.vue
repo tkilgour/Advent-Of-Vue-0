@@ -66,6 +66,7 @@ const message = computed({
     }
   },
   set(message) {
+    // this doesn't seem to get invoked.
     return message
   },
 })
