@@ -4,6 +4,7 @@
       {{ tile }}
     </GameTile>
   </div>
+  <p class="pt-8 text-2xl">It's {{ playerTurn }}'s turn.</p>
 </template>
 
 <script setup>
@@ -11,10 +12,11 @@ import { ref, computed } from 'vue'
 import GameTile from './GameTile.vue'
 
 const boardState = ref([
-  ['x', '', 'o'],
-  ['', 'o', ''],
-  ['', '', 'x'],
+  ['X', '', 'O'],
+  ['', 'O', ''],
+  ['', '', 'X'],
 ])
-
 const tiles = computed(() => boardState.value.flat())
+
+const playerTurn = ref(Math.random() > 0.5 ? 'X' : 'O')
 </script>
