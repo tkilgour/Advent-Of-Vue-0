@@ -41,8 +41,10 @@ const checkWinState = () => {
 
   // check diagonals for all playerTurn
   if (boardState.value.every((row, index) => row[index] === playerTurn.value)) winner.value = playerTurn.value
-
   if (boardState.value.every((row, index) => row[2 - index] === playerTurn.value)) winner.value = playerTurn.value
+
+  // check draw
+  if (!boardState.value.some(row => row.some(item => item === ''))) message.value = 'Draw!'
 }
 
 const handleClick = index => {
@@ -55,13 +57,17 @@ const handleClick = index => {
   playerTurn.value === 'X' ? (playerTurn.value = 'O') : (playerTurn.value = 'X')
 }
 
-const message = computed(() => {
-  if (winner.value) {
-    return `${winner.value} wins!`
-  } else {
-    return `It's ${playerTurn.value}'s turn.`
-  }
-  // TODO: handle draw
+const message = computed({
+  get() {
+    if (winner.value) {
+      return `${winner.value} wins!`
+    } else {
+      return `It's ${playerTurn.value}'s turn.`
+    }
+  },
+  set(message) {
+    return message
+  },
 })
 
 const resetGame = () => {
