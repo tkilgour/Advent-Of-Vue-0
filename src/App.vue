@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-screen pt-28 flex flex-col items-center">
+  <div class="w-full pt-28 flex flex-col items-center">
     <GameBoard />
   </div>
 </template>
