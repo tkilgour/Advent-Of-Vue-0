@@ -10,7 +10,8 @@
         class="transition-opacity w-full h-full grid place-items-center"
         :class="tile.length ? 'opacity-100' : 'opacity-0 hover:opacity-30'"
       >
-        {{ tile || playerTurn }}
+        <span v-if="!(tile || winner)">{{ playerTurn }}</span>
+        {{ tile }}
       </div>
     </GameTile>
   </div>
