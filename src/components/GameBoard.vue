@@ -6,7 +6,12 @@
       :disabled="tile.length || winner"
       @click="() => handleClick(index)"
     >
-      {{ tile }}
+      <div
+        class="transition-opacity w-full h-full grid place-items-center"
+        :class="tile.length ? 'opacity-100' : 'opacity-0 hover:opacity-30'"
+      >
+        {{ tile || playerTurn }}
+      </div>
     </GameTile>
   </div>
   <p class="pt-8 text-2xl">{{ message }}</p>
