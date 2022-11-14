@@ -7,11 +7,10 @@
       :disabled="tile.length || winner"
       @click="() => handleClick(index)"
     >
-      <div
-        class="transition-opacity w-full h-full grid place-items-center"
-        :class="tile.length ? 'opacity-100' : 'opacity-0 hover:opacity-30'"
-      >
-        <span v-if="!(tile || winner)">{{ playerTurn }}</span>
+      <div class="w-full h-full grid place-items-center group">
+        <span v-if="!(tile || winner)" class="transition-opacity opacity-0 group-hover:opacity-30">
+          {{ playerTurn }}
+        </span>
         {{ tile }}
       </div>
     </GameTile>
@@ -83,13 +82,14 @@ const message = computed(() => {
 })
 
 const resetGame = () => {
+  winner.value = null
+  winLinePosition.value = [null, null]
+
   boardState.value = [
     ['', '', ''],
     ['', '', ''],
     ['', '', ''],
   ]
-  winner.value = null
-  winLinePosition.value = [null, null]
 }
 resetGame()
 </script>
