@@ -1,5 +1,6 @@
 <template>
-  <div class="grid grid-cols-3 grid-rows-3 bg-gray-dark gap-0.5">
+  <div class="grid grid-cols-3 grid-rows-3 bg-gray-dark gap-0.5 relative">
+    <WinLine :position="winLinePosition" />
     <GameTile
       v-for="(tile, index) in tiles"
       :key="index"
@@ -22,17 +23,20 @@
 <script setup>
 import { ref, computed } from 'vue'
 import GameTile from './GameTile.vue'
+import WinLine from './WinLine.vue'
 
 const boardState = ref(null)
 const tiles = computed(() => boardState.value.flat())
 const playerTurn = ref(Math.random() > 0.5 ? 'X' : 'O')
 const winner = ref(null)
+const winLinePosition = ref([null, null])
 
 const checkWinState = () => {
   // check rows for all playerTurn
-  boardState.value.forEach(row => {
+  boardState.value.forEach((row, index) => {
     if (row.every(item => item === playerTurn.value)) {
       winner.value = playerTurn.value
+      winLinePosition.value = [index * 3, index * 3 + 2]
     }
   })
 
@@ -40,12 +44,19 @@ const checkWinState = () => {
   for (let i = 0; i < 3; i++) {
     if (boardState.value.every(row => row[i] === playerTurn.value)) {
       winner.value = playerTurn.value
+      winLinePosition.value = [i, i + 6]
     }
   }
 
   // check diagonals for all playerTurn
-  if (boardState.value.every((row, index) => row[index] === playerTurn.value)) winner.value = playerTurn.value
-  if (boardState.value.every((row, index) => row[2 - index] === playerTurn.value)) winner.value = playerTurn.value
+  if (boardState.value.every((row, index) => row[index] === playerTurn.value)) {
+    winner.value = playerTurn.value
+    winLinePosition.value = [0, 8]
+  }
+  if (boardState.value.every((row, index) => row[2 - index] === playerTurn.value)) {
+    winner.value = playerTurn.value
+    winLinePosition.value = [2, 6]
+  }
 
   // check draw
   if (!boardState.value.some(row => row.some(item => item === ''))) winner.value = 'draw'
@@ -78,6 +89,7 @@ const resetGame = () => {
     ['', '', ''],
   ]
   winner.value = null
+  winLinePosition.value = [null, null]
 }
 resetGame()
 </script>
